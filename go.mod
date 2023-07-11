@@ -3,7 +3,7 @@ module github.com/coredns/client
 go 1.19
 
 require (
-	github.com/coredns/coredns v1.2.4
+	github.com/coredns/coredns v1.10.1
 	github.com/miekg/dns v1.1.55
 	google.golang.org/grpc v1.56.2
 )
