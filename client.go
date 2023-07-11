@@ -11,7 +11,8 @@ import (
 
 	"github.com/miekg/dns"
 	"google.golang.org/grpc"
-	creds "google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // Client provides a convenient interface to a gRPC-based DNS service.
@@ -50,13 +51,13 @@ func NewClient(endpoint, cert, key, ca string, dialOpts []grpc.DialOption) (*Cli
 	}
 
 	if len(tlsargs) == 0 {
-		dialOpts = append(dialOpts, grpc.WithInsecure())
+		dialOpts = append(dialOpts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	} else {
 		tlsConfig, err := tls.NewTLSConfigFromArgs(tlsargs...)
 		if err != nil {
 			return nil, err
 		}
-		dialOpts = append(dialOpts, grpc.WithTransportCredentials(creds.NewTLS(tlsConfig)))
+		dialOpts = append(dialOpts, grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)))
 	}
 	conn, err := grpc.Dial(endpoint, dialOpts...)
 	if err != nil {
