@@ -28,6 +28,8 @@ type Msg struct {
 }
 
 // Watch is used to track access results from watching a particular query.
+//
+// Deprecated: CoreDNS server >= 1.3.0 does not support watch.
 type Watch struct {
 	WatchID int64
 	Msgs    chan *Msg
@@ -95,6 +97,8 @@ func (c *Client) QueryNameAndType(qname string, qtype uint16) (*dns.Msg, error) 
 
 // Watch requests that the server push change notifications to this client for a
 // specific query.
+//
+// Deprecated: CoreDNS server >= 1.3.0 does not support watch.
 func (c *Client) Watch(req *dns.Msg) (*Watch, error) {
 	p, err := req.Pack()
 	if err != nil {
@@ -168,6 +172,8 @@ func (c *Client) Watch(req *dns.Msg) (*Watch, error) {
 }
 
 // WatchNameAndType is a convenience function to setup a watch by name and type.
+//
+// Deprecated: CoreDNS server >= 1.3.0 does not support watch.
 func (c *Client) WatchNameAndType(qname string, qtype uint16) (*Watch, error) {
 	m := &dns.Msg{}
 	m.SetQuestion(dns.Fqdn(qname), qtype)
@@ -177,6 +183,8 @@ func (c *Client) WatchNameAndType(qname string, qtype uint16) (*Watch, error) {
 
 // Stop will cancel the watch in the server, so no further updates will be sent
 // for that particular query.
+//
+// Deprecated: CoreDNS server >= 1.3.0 does not support watch.
 func (w *Watch) Stop() error {
 	cr := &pb.WatchRequest_CancelRequest{CancelRequest: &pb.WatchCancelRequest{WatchId: w.WatchID}}
 	return w.stream.Send(&pb.WatchRequest{RequestUnion: cr})
